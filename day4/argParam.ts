@@ -30,3 +30,13 @@ const sumAll = (...nums: number[]) => {
 console.log(
   sumAll(1, 3, 4, 4, 6, 24234, 24, 524, 1324, 13245, 45, 345, 345, 345),
 );
+console.log("-----------------------------------");
+
+// 일반 파라미터와 rest 파라미터 혼합 사용
+const test = (a: any, b: any, ...args: any[]) => {
+  console.log(a);
+  console.log(b);
+  console.log(args);
+};
+
+test(1, 2, 3, 12, 135, 13, 513, 53);
