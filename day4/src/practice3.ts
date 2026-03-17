@@ -1,5 +1,6 @@
-const weight: number = parseFloat(process.argv[0]!) || 100;
-const height: number = parseFloat(process.argv[1]!) || 180;
+const args = process.argv.slice(2);
+const weight: number = parseFloat(args[0]!) || 100;
+const height: number = parseFloat(args[1]!) || 180;
 
 const calculateBMI = (w: number, h: number) => {
   const hM = h / 100;
