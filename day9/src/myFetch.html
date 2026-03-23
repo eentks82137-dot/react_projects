@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Fetch 특징 실습</title>
+  </head>
+  <body>
+    <h1>fetch 특징 실습</h1>
+
+    <div id="result"></div>
+    <hr />
+
+    <div id="output"></div>
+
+    <script>
+      const result = document.getElementById('result');
+
+      /* -------------------------------------------------------
+      1. 브라우저에 내장된 비동기 HTTP 요청 함수
+         - fetch()는 HTTP 요청을 서버로 보내고
+           응답을 비동기적으로 처리한다.
+      -------------------------------------------------------- */
+      function basicFetchExample() {
+        fetch('https://jsonplaceholder.typicode.com/posts/1')
+          .then((response) => response.json()) // JSON 변환
+          .then((data) => {
+            result.innerHTML += '<h2>1. 기본 fetch 요청</h2>';
+            result.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          })
+          .catch((err) => console.error(err));
+      }
+
+      /* -------------------------------------------------------
+      2. Promise 기반 → 비동기 처리 가능
+         - then(), catch(), finally() 사용 가능
+         - 요청이 끝날 때까지 기다리지 않고 다음 코드 실행
+      -------------------------------------------------------- */
+      function promiseBasedExample() {
+        result.innerHTML += '<h2>2. Promise 기반 비동기</h2>';
+
+        const p = fetch('https://jsonplaceholder.typicode.com/todos/1')
+          .then((res) => res.json())
+          .then((data) => {
+            result.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+          });
+
+        result.innerHTML +=
+          '→ fetch 요청을 보냈지만, 아래 코드는 즉시 실행됨!<br>';
+      }
+
+      /* -------------------------------------------------------
+      3. JSON, 텍스트 등 다양한 응답 처리 가능
+         - response.json()
+         - response.text()
+         - response.blob() (이미지 등)
+      -------------------------------------------------------- */
+      function multipleResponseTypeExample() {
+        result.innerHTML += '<h2>3. 다양한 응답 타입 처리</h2>';
+
+        // (1) JSON
+        fetch('https://jsonplaceholder.typicode.com/posts/2')
+          .then((res) => res.json())
+          .then((json) => {
+            result.innerHTML += '<strong>JSON 응답:</strong><br>';
+            result.innerHTML += `<pre>${JSON.stringify(json, null, 2)}</pre>`;
+          });
+
+        // (2) 텍스트
+        fetch('https://www.w3.org/TR/PNG/iso_8859-1.txt') // 공개 텍스트 문서
+          .then((res) => res.text())
+          .then((text) => {
+            result.innerHTML += '<strong>텍스트 응답:</strong><br>';
+            result.innerHTML += `<pre>${text.substring(0, 200)}...</pre>`;
+          });
+      }
+      /* -------------------------------------------------------
+      4. AJAX 방식 → 전체 페이지 새로고침 없음
+         - DOM 일부만 변경하여 동적으로 업데이트 가능
+      -------------------------------------------------------- */
+      function partialUpdateExample() {
+        result.innerHTML += '<h2>4. 페이지 새로고침 없이 부분 업데이트</h2>';
+
+        fetch('https://jsonplaceholder.typicode.com/users/1')
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+
+            result.innerHTML += `<p>사용자 이름: <strong>${data.name}</strong></p>`;
+            result.innerHTML += `<p>사용자 이메일: <strong>${data.email}</strong></p>`;
+            result.innerHTML += `<p>사용자 주소: <strong>${data.address.street}, ${data.address.city}</strong></p>`;
+            result.innerHTML += `<p>사용자 전화번호: <strong>${data.phone}</strong></p>`;
+          });
+      }
+
+      /* -------------------------------------------------------
+      5. 브라우저 지원 (IE 제외)
+         - 최신 브라우저는 대부분 fetch 지원
+         - IE는 fetch 미지원 → XMLHttpRequest 필요
+         - 여기서는 JS 콘솔에서 지원 여부를 확인하는 예시
+      -------------------------------------------------------- */
+      function browserSupportExample() {
+        result.innerHTML += '<h2>5. 브라우저 지원 여부</h2>';
+
+        if ('fetch' in window) {
+          result.innerHTML += '✔ 이 브라우저는 fetch를 지원합니다.<br>';
+        } else {
+          result.innerHTML += 'fetch 미지원 → XMLHttpRequest 사용 필요<br>';
+        }
+      }
+
+      // ---- 실행 ----
+      // basicFetchExample();
+      // promiseBasedExample();
+      // multipleResponseTypeExample();
+      partialUpdateExample();
+      // browserSupportExample();
+    </script>
+  </body>
+</html>
