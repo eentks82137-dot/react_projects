@@ -37,3 +37,22 @@ const myAccount = createAccount();
 console.log(`100 입금 | ${myAccount.deposit(100)}`); // 100
 console.log(`50 출금 | ${myAccount.withdraw(50)}`); // 50
 console.log(`100 출금 | ${myAccount.withdraw(100)}`); // Insufficient funds, 50
+
+const createPlaylist = () => {
+  let songs: string[] = [];
+  return {
+    addSong: (song: string) => {
+      songs.push(song);
+      return songs;
+    },
+    getList: () => {
+      return songs;
+    },
+  };
+};
+
+const playlist = createPlaylist();
+
+console.log(playlist.addSong('Song A')); // ['Song A']
+console.log(playlist.addSong('Song B')); // ['Song A', 'Song B']
+console.log(playlist.getList()); // ['Song A', 'Song B']
