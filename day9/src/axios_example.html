@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- CDN을 통해 Axios와 Tailwind CSS를 로드 -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Axios Example</title>
+
+    <!-- favicon 비활성화  -->
+    <link rel="icon" href="data:," />
+  </head>
+  <body class="p-4">
+    <div
+      class="mt-4 flex flex-col items-start space-y-4 w-full max-w-xl mx-auto"
+    >
+      <h1>Axios Example</h1>
+      <button
+        id="fetch-btn"
+        class="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer"
+      >
+        Fetch Data
+      </button>
+      <pre
+        id="result"
+        class="mt-4 p-4 bg-gray-100 rounded overflow-auto w-full max-h-64"
+      ></pre>
+    </div>
+
+    <div
+      class="mt-8 flex flex-col items-start space-y-4 w-full max-w-xl mx-auto"
+    >
+      <button
+        id="btnRead"
+        class="px-4 py-2 text-white rounded cursor-pointer bg-green-500"
+      >
+        GET : 데이터 조회
+      </button>
+      <div
+        id="readResult"
+        class="mt-4 p-4 bg-gray-100 rounded overflow-auto w-full max-h-64"
+      ></div>
+
+      <hr />
+      <button
+        id="btnCreate"
+        class="px-4 py-2 bg-amber-300 text-white rounded cursor-pointer"
+      >
+        POST : 데이터 생성
+      </button>
+      <div
+        id="createResult"
+        class="mt-4 p-4 bg-gray-100 rounded overflow-auto w-full max-h-64"
+      ></div>
+
+      <hr />
+      <button
+        id="btnUpdate"
+        class="px-4 py-2 bg-indigo-400 text-white rounded cursor-pointer"
+      >
+        PUT : 데이터 수정
+      </button>
+      <div
+        id="updateResult"
+        class="mt-4 p-4 bg-gray-100 rounded overflow-auto w-full max-h-64"
+      ></div>
+
+      <hr />
+      <button
+        id="btnDelete"
+        class="px-4 py-2 bg-red-500 text-white rounded cursor-pointer"
+      >
+        DELETE : 데이터 삭제
+      </button>
+      <div
+        id="deleteResult"
+        class="mt-4 p-4 bg-gray-100 rounded overflow-auto w-full max-h-64"
+      ></div>
+    </div>
+  </body>
+  <script>
+    const fetchBtn = document.getElementById('fetch-btn');
+    const result = document.getElementById('result');
+    const API_URL = 'https://jsonplaceholder.typicode.com/posts';
+
+    fetchBtn.addEventListener('click', async () => {
+      try {
+        const response = await axios.get(API_URL);
+        result.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        result.textContent = `Error: ${error}`;
+      }
+    });
+
+    // GET : 데이터 조회 (jsonplaceholder는 실제 데이터가 변경되지 않으므로 항상 동일한 데이터를 반환)
+    const btnRead = document.getElementById('btnRead');
+    const readResult = document.getElementById('readResult');
+    btnRead.addEventListener('click', async () => {
+      try {
+        const response = await axios.get(API_URL);
+        const posts = response.data
+          .slice(0, 5)
+          .map((post) => `<li>${post.title}</li>`)
+          .join('');
+        readResult.innerHTML = `<ul>${posts}</ul>`;
+      } catch (error) {
+        readResult.textContent = `Error: ${error}`;
+      }
+    });
+
+    // POST : 데이터 생성 (jsonplaceholder는 실제 생성이 일어나지 않고 항상 성공 응답을 반환)
+    const btnCreate = document.getElementById('btnCreate');
+    const createResult = document.getElementById('createResult');
+    btnCreate.addEventListener('click', async () => {
+      try {
+        const newPost = {
+          title: 'New Post',
+          body: 'This is a new post created using POST request.',
+          userId: 1,
+        };
+        const response = await axios.post(API_URL, newPost);
+        createResult.textContent = `Created Post ID: ${response.data.id}`;
+        console.log('Created Post:', response.data);
+        /*  
+          {
+            title: 'New Post',
+            body: 'This is a new post created using POST request.',
+            userId: 1,
+            id: 101
+          }
+        */
+      } catch (error) {
+        createResult.textContent = `Error: ${error}`;
+      }
+    });
+
+    // PUT : 데이터 수정 (jsonplaceholder는 실제 수정이 일어나지 않고 항상 성공 응답을 반환)
+    const btnUpdate = document.getElementById('btnUpdate');
+    const updateResult = document.getElementById('updateResult');
+    btnUpdate.addEventListener('click', async () => {
+      try {
+        const updatedPost = {
+          id: 1,
+          title: 'Updated Post',
+          body: 'This post has been updated using PUT request.',
+          userId: 1,
+        };
+        const response = await axios.put(`${API_URL}/1`, updatedPost);
+        updateResult.textContent = `Updated Post ID: ${response.data.id}`;
+        console.log('Updated Post:', response.data);
+        /*
+          {
+            id: 1,
+            title: 'Updated Post',
+            body: 'This post has been updated using PUT request.',
+            userId: 1
+          }
+        */
+      } catch (error) {
+        updateResult.textContent = `Error: ${error}`;
+      }
+    });
+
+    // DELETE : 데이터 삭제 (jsonplaceholder는 실제 삭제가 일어나지 않고 항상 성공 응답을 반환)
+    const btnDelete = document.getElementById('btnDelete');
+    const deleteResult = document.getElementById('deleteResult');
+    btnDelete.addEventListener('click', async () => {
+      try {
+        await axios.delete(`${API_URL}/1`);
+        deleteResult.textContent = 'Post with ID 1 has been deleted.';
+        console.log('Post with ID 1 deleted');
+      } catch (error) {
+        deleteResult.textContent = `Error: ${error}`;
+      }
+    });
+  </script>
+</html>

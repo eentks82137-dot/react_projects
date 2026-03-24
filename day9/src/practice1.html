@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <title>Practice1</title>
+  </head>
+  <body>
+    <h1>Practice 1</h1>
+
+    <div>
+      <button id="fetchBtn">Fetch</button>
+      <pre id="result"></pre>
+    </div>
+
+    <div>
+      <button id="postBtn">Post</button>
+      <pre id="postResult"></pre>
+    </div>
+
+    <div>
+      <button id="putBtn">Put</button>
+      <pre id="putResult"></pre>
+    </div>
+
+    <div>
+      <button id="deleteBtn">Delete</button>
+      <pre id="deleteResult"></pre>
+    </div>
+  </body>
+
+  <script>
+    const fetchBtn = document.getElementById('fetchBtn');
+    const result = document.getElementById('result');
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    fetchBtn.addEventListener('click', async () => {
+      try {
+        const response = await axios.get(`${url}/1`);
+        const data = response.data;
+        result.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    const postBtn = document.getElementById('postBtn');
+    const postResult = document.getElementById('postResult');
+
+    postBtn.addEventListener('click', async () => {
+      const article = {
+        title: 'Axios Test',
+        body: 'Axios Post 연습',
+        userId: 1,
+      };
+      try {
+        const response = await axios.post(url, article);
+        const data = response.data;
+        postResult.textContent = JSON.stringify(data, null, 2);
+        console.log(response);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    const putBtn = document.getElementById('putBtn');
+    const putResult = document.getElementById('putResult');
+
+    putBtn.addEventListener('click', async () => {
+      const article = {
+        title: 'Axios Test',
+        body: 'Axios Post 연습',
+        userId: 1,
+      };
+      try {
+        const response = await axios.put(url + '/100', article);
+        const data = response.data;
+        putResult.textContent = JSON.stringify(data, null, 2);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+
+    const deleteBtn = document.getElementById('deleteBtn');
+    const deleteResult = document.getElementById('deleteResult');
+
+    deleteBtn.addEventListener('click', async () => {
+      try {
+        const response = await axios.delete(url + '/1');
+        deleteResult.textContent = '게시글이 삭제되었습니다.';
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  </script>
+</html>
