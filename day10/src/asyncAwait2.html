@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Async Await 2</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <p>console 확인</p>
+  </body>
+  <script>
+    const ex1 = async () => {
+      console.log('ex1');
+      const result = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('ex1 result');
+        }, 1000);
+      });
+      console.log(`ex1 result: ${result}`);
+    };
+    ex1();
+
+    const ex2 = async () => {
+      return '일반 문자열';
+    };
+    ex2().then((result) => {
+      console.log(`ex2 result: ${result}`);
+    });
+
+    const test = async () => {
+      return 1557;
+    };
+
+    const print = async () => {
+      const result = await test();
+      console.log(`test result: ${result}`);
+    };
+
+    print();
+
+    const test2 = async () => {
+      return new Promise.resolve(1557);
+    };
+
+    const print2 = async () => {
+      const result = await test2();
+      console.log(`test2 result: ${result}`);
+    };
+
+    print2();
+  </script>
+</html>

@@ -14,21 +14,21 @@
   </body>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const resultElement = document.getElementById('result');
 
       // Axios를 사용하여 GET 요청 보내기
-      axios
-        .get('https://jsonplaceholder.typicode.com/users')
-        .then((response) => {
-          // 응답 데이터를 resultElement에 표시
-          resultElement.textContent = JSON.stringify(response.data, null, 2);
-        })
-        .catch((error) => {
-          console.error('Error fetching data:', error);
-          resultElement.textContent =
-            'Error fetching data. Check console for details.';
-        });
+      try {
+        const response = await axios.get(
+          'https://jsonplaceholder.typicode.com/users',
+        );
+        // 응답 데이터를 resultElement에 표시
+        resultElement.textContent = JSON.stringify(response.data, null, 2);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        resultElement.textContent =
+          'Error fetching data. Check console for details.';
+      }
     });
   </script>
 </html>
